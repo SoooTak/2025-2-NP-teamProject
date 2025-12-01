@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JavaFX로 만든 간단한 LMS 클라이언트 앱.
+ * 화면 구성만 담당하고, 실제 네트워크 통신은 LmsClient가 맡는다.
+ */
 public class App extends Application {
 
     private Stage primaryStage;

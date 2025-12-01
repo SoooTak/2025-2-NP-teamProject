@@ -6,6 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 서버와 TCP로 통신하는 헬퍼 클래스.
+ * 화면(App.java)은 이 메서드들을 호출해서 문자열 기반 프로토콜만 주고받는다.
+ */
 public class LmsClient {
 
     // Docker 컨테이너 포트 매핑 기준

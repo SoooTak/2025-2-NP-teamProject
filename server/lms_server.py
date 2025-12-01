@@ -1,4 +1,5 @@
 # lms_server.py
+# TCP 소켓과 간단한 HTTP 서버로 과제/공지/영상/채팅을 처리하는 백엔드입니다.
 import os
 import socket
 import threading
@@ -9,11 +10,11 @@ from urllib.parse import urlparse
 import mysql.connector
 from mysql.connector import Error
 
-HOST = ""          # 0.0.0.0
+HOST = ""          # 빈 문자열이면 0.0.0.0에 바인딩된다.
 PORT = 5051        # 컨테이너 내부 TCP 포트 (docker -p 6000:5051 로 매핑)
 HTTP_PORT = 8081   # 영상 스트리밍 HTTP 포트
 
-# DB 설정 (MySQL 호스트는 host.docker.internal 로 가정)
+# DB 설정 (Docker 컨테이너에서 host.docker.internal 로 접속)
 DB_CONFIG = {
     "host": "host.docker.internal",
     "port": 3306,
@@ -29,14 +30,14 @@ VIDEO_DIR = os.path.join("/app", "videos")  # Docker 내부 경로 (호스트의
 os.makedirs(SUBMISSION_DIR, exist_ok=True)
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
-# 간단한 유저 테이블 (id: (password, role, display_name))
+# 예제용 기본 로그인 정보 (id: (password, role, display_name))
 USERS = {
     "student": ("1234", "STUDENT", "김민상"),
     "teacher": ("1234", "TEACHER", "박교수"),
 }
 
-# 아주 간단한 메모리 기반 채팅 저장소
-# 각 원소: (from_id, to_id, message)
+# 메모리에만 쌓이는 채팅 메시지 목록
+# 각 메시지: (보낸 사람, 받는 사람, 내용)
 MESSAGES = []
 
 
@@ -1152,9 +1153,11 @@ def handle_client(conn, addr):
 
 
 def main():
+    # 동영상 스트리밍용 HTTP 서버를 별도 스레드에서 띄운다.
     t_http = threading.Thread(target=run_http_server, daemon=True)
     t_http.start()
 
+    # 메인 스레드는 TCP 요청을 받아 각 클라이언트마다 스레드를 생성한다.
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((HOST, PORT))

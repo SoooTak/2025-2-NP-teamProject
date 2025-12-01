@@ -1,4 +1,4 @@
-<!-- C:\Users\MinSang\Desktop\Coding\네트워크 프로그래밍\2025-2-NP-teamProject\pom.xml -->
+<!-- Maven 빌드 설정: Java 21과 JavaFX를 쓰는 LMS 클라이언트 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,7 @@
   </properties>
 
   <dependencies>
-    <!-- JavaFX UI 라이브러리 -->
+    <!-- JavaFX UI 라이브러리 (화면을 그리는 데 필요) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -43,7 +43,7 @@
 
   <build>
     <plugins>
-      <!-- JavaFX 실행 플러그인 -->
+      <!-- JavaFX 실행 플러그인: javafx:run 등 명령을 도와준다 -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
